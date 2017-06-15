@@ -7,15 +7,18 @@ public class ContactMeGuiPartial extends JFrame
 	private static final int WIDTH = 400;
 	private static final int HEIGHT = 300;
 
-	private JLabel emailL, passwordL,reEnterPassL, messageL, completeName;
+	private JLabel emailL, passwordL,reEnterPassL, messageL, completeName, gender, empty;
 	private JTextField completeNameTF, emailTF, messageTF;
 	private JTextField passwordTF,reEnterPassTF;
 	private JButton sendB, exitB, clearB;
+	private JRadioButton female, male;
 
 	private SendButtonHandler sbHandler;
 	private ExitButtonHandler ebHandler;
+	private ClearButtonHandler cbHandler;
 
-	private JMenuBar  menuBar;
+
+	private JMenuBar menuBar;
 	private JMenu make;
 	private JMenuItem byEmail;
 	private JMenuItem byFax, byCellPhone, byRegularMail;
@@ -24,9 +27,12 @@ public class ContactMeGuiPartial extends JFrame
 	{
 		completeName = new JLabel ("Name: ", SwingConstants.CENTER);
 		emailL = new JLabel("Email: ", SwingConstants.CENTER);
+		gender = new JLabel("Gender: ", SwingConstants.CENTER);
+		empty = new JLabel("", SwingConstants.CENTER);
 		passwordL = new JLabel("Password: ", SwingConstants.CENTER);
 		reEnterPassL= new JLabel("Re-enter Password: ", SwingConstants.CENTER);
 		messageL = new JLabel("Addtional Info: ", SwingConstants.CENTER);
+		
 
 		completeNameTF = new JTextField();
 		emailTF = new JTextField();
@@ -34,7 +40,7 @@ public class ContactMeGuiPartial extends JFrame
 		reEnterPassTF = new JPasswordField();
 		//Practicing Inner Classes
 		//Implemented when enter is hit
-				reEnterPassTF.addActionListener(new ActionListener() {
+		reEnterPassTF.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e){
 						if (!passwordTF.getText().equals(reEnterPassTF.getText())) {
 							JOptionPane.showMessageDialog(null, "Passwords don't match."); 
@@ -44,21 +50,46 @@ public class ContactMeGuiPartial extends JFrame
 						}
 					}
 				});
-				
 		
 		messageTF = new JTextField();
 		//SPecify handlers for each button and add (register) ActionListeners to each button.
 		sendB = new JButton("Send");
 		sbHandler = new SendButtonHandler();
 		sendB.addActionListener(sbHandler);
-
+		
+		
+	
+	   
 		exitB = new JButton("Exit");
 		ebHandler = new ExitButtonHandler();
 		exitB.addActionListener(ebHandler);
-
+		
 		clearB = new JButton("Clear");
+		cbHandler = new ClearButtonHandler();
+		clearB.addActionListener(cbHandler);
+		
 
+		female = new JRadioButton(" Female ");
+		female.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e){
+				if (female.isSelected()){
+					male.setSelected(false);
+				}
+			}
+		});
+		female.setSelected(false);
+		
+	    male = new JRadioButton(" Male ");
+	    male.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e){
+				if (male.isSelected()){
+					female.setSelected(false);
+				}
+			}
+		});
+	    male.setSelected(false);
 
+	 
 		menuBar = new JMenuBar();
 		make = new JMenu("            Contact Me                 ");
 		byEmail = new JMenuItem("by Email");
@@ -74,13 +105,17 @@ public class ContactMeGuiPartial extends JFrame
 
 		setTitle("Registration Form");
 		Container pane = getContentPane();
-		pane.setLayout(new GridLayout(7, 4));
+		pane.setLayout(new GridLayout(9, 3));
 
 		//Add things to the pane in the order you want them to appear (left to right, top to bottom)
 		pane.add(completeName);
 		pane.add(completeNameTF);
 		pane.add(emailL);
 		pane.add(emailTF);
+		pane.add(gender);
+		pane.add(female);
+		pane.add(empty);
+		pane.add(male);
 		pane.add(passwordL);
 		pane.add(passwordTF);
 		pane.add(reEnterPassL);
@@ -99,7 +134,7 @@ public class ContactMeGuiPartial extends JFrame
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
 	}
-	
+
 	private class SendButtonHandler implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e)
@@ -145,22 +180,38 @@ public class ContactMeGuiPartial extends JFrame
 
 			//massageTF.setText("" + area);
 		}
+		public boolean emailHasAt() {
+			String inputEmail = emailTF.getText();
+			for (int i = 0; i < inputEmail.length(); i++) {
+				if (inputEmail.contains("@")) {
+					return true;
+				}
+			}
+			return false;
+		}
 	}
 
-	public boolean emailHasAt() {
-		String inputEmail = emailTF.getText();
-		for (int i = 0; i < inputEmail.length(); i++) {
-			if (inputEmail.contains("@")) {
-				return true;
-			}
-		}
-		return false;
-	}
+	
 	public class ExitButtonHandler implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e)
 		{
-			System.exit(0);
+			
+		}
+	}
+	
+	public class ClearButtonHandler implements ActionListener
+	{
+		public void actionPerformed(ActionEvent e)
+		{
+			completeNameTF.setText("");
+			emailTF.setText("");
+			passwordTF.setText("");
+			reEnterPassTF.setText("");
+			messageTF.setText("");
+			female.setSelected(false);
+			male.setSelected(false);
+			
 		}
 	}
 
